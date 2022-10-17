@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "687102100040",
+    "project_id": "tracking-loc-9ab28",
+    "storage_bucket": "tracking-loc-9ab28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687102100040:android:0f4b4afea19de210de8e7d",
+        "android_client_info": {
+          "package_name": "com.example.device_tracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687102100040-fgu8c702p1tae4l7r5231qse41q2ive1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1JgpN1KMRStp3olSQWsB5wNIJYl0Z2EA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687102100040-fgu8c702p1tae4l7r5231qse41q2ive1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
