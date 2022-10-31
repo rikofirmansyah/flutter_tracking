@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:device_tracking/Component/button.dart';
+import 'package:get_storage/get_storage.dart';
 import '../constants.dart';
 import 'Home_Screen.dart';
 import 'Register_Screen.dart';
@@ -22,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    GetStorage box = GetStorage();
     return Scaffold(
       body: isloading
           ? const Center(
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   try {
                                     await _auth.signInWithEmailAndPassword(
                                         email: email, password: password);
-
+                                    await box.write('oldPass', password);
                                     await Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (contex) => const HomeScreen(),
@@ -128,7 +130,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ],
                                       ),
                                     );
-                                    print(e);
                                   }
                                   setState(() {
                                     isloading = false;

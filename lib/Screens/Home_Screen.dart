@@ -1,10 +1,15 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_tracking/Screens/account.dart';
+import 'package:device_tracking/Screens/history.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:device_tracking/Screens/Login_Screen.dart';
 import 'package:device_tracking/Screens/maps.dart';
 import 'package:device_tracking/Screens/account.dart';
 import 'package:device_tracking/Component/header_drawer.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+final locRef = FirebaseFirestore.instance.collection('loc_device');
 var scaffoldKey = GlobalKey<ScaffoldState>();
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -34,17 +40,50 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               leading: const Icon(Icons.notifications_active_rounded),
               title: const Text("Notification"),
-              onTap: () {},
+              onTap: () async {
+                final doc = FirebaseFirestore.instance.collection("loc_device");
+                final refDoc = doc.doc();
+                await refDoc.set({
+                  "coords": GeoPoint(0.562, 101.4),
+                  "id": refDoc.id,
+                  "kemiringan": "204",
+                  "place": "Jl. Raya Cikarang",
+                  "time": DateTime.now(),
+                });
+              },
             ),
             ListTile(
               leading: const Icon(Icons.settings),
               title: const Text("Reset"),
-              onTap: () {},
+              onTap: () async {
+                var snapshot = await FirebaseFirestore.instance
+                    .collection("loc_device")
+                    .orderBy("time")
+                    .get();
+                for (var i = 0; i < snapshot.docs.length; i++) {
+                  if (i + 1 == snapshot.docs.length) {
+                    break;
+                  } else {
+                    await FirebaseFirestore.instance
+                        .collection("loc_device")
+                        .doc(snapshot.docs[i].id)
+                        .delete();
+                  }
+                }
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
-              onTap: () {},
+              onTap: () {
+                _firebaseAuth.signOut();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const LoginScreen(),
+                  ),
+                );
+              },
             ),
           ]),
         ),
@@ -124,7 +163,10 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0,
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const History()));
+              },
               splashColor: Colors.lightBlueAccent,
               child: Center(
                   child: Column(
@@ -153,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: InkWell(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Account()));
+                    MaterialPageRoute(builder: (context) => Account()));
               },
               splashColor: Colors.lightBlueAccent,
               child: Center(

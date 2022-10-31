@@ -1,10 +1,15 @@
+import 'package:device_tracking/Screens/Home_Screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'Screens/Login_Screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
   await Firebase.initializeApp(
     // Replace with actual values
     options: const FirebaseOptions(
@@ -20,16 +25,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    User? user = FirebaseAuth.instance.currentUser;
+    return GetMaterialApp(
       title: 'Device Tracking',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: user == null ? const LoginScreen() : const HomeScreen(),
     );
   }
 }
